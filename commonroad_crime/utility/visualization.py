@@ -314,7 +314,7 @@ def plot_criticality_curve(crime, nr_per_row=2, flag_latex=True):
 
 
 def visualize_scenario_at_time_steps(
-    scenario: Scenario, plot_limit, time_steps: List[int]
+    scenario: Scenario, plot_limit, time_steps: List[int], print_obstacle_ids: bool = False,
 ):
     rnd = MPRenderer(plot_limits=plot_limit)
     rnd.draw_params.time_begin = time_steps[0]
@@ -333,8 +333,32 @@ def visualize_scenario_at_time_steps(
         )
         for ts in time_steps[1:]:
             draw_dyn_vehicle_shape(rnd, obs, ts, color=TUMcolor.TUMblue)
+
+        if print_obstacle_ids:
+            print_obstacle_id(rnd, obs, time_steps[0], color=TUMcolor.TUMblack)
     plt.show()
 
+def print_obstacle_id(   
+    rnd: MPRenderer,
+    obstacle: DynamicObstacle,
+    time_step: int,
+    color: TUMcolor = TUMcolor.TUMblue,
+    fontsize: int = 11,
+):
+    global zorder
+    obs_shape = obstacle.occupancy_at_time(time_step).shape
+    if isinstance(obs_shape, ShapeGroup):
+        for shape_element in obs_shape.shapes:
+            centroid = shape_element.shapely_object.centroid
+            rnd.ax.text(
+                centroid.x, centroid.y, str(obstacle.obstacle_id), color=color, fontsize=fontsize, zorder=zorder
+            )
+    else:
+        centroid = obs_shape.shapely_object.centroid
+        rnd.ax.text(
+            centroid.x, centroid.y, str(obstacle.obstacle_id), color=color, fontsize=fontsize, zorder=zorder
+        )
+    zorder += 1   
 
 def make_gif(
     path: str,
