@@ -21,6 +21,7 @@ from commonroad.geometry.shape import ShapeGroup
 from commonroad.scenario.state import PMState, State
 from commonroad.scenario.scenario import Scenario
 from commonroad.scenario.obstacle import DynamicObstacle
+from commonroad.scenario.trajectory import Trajectory
 
 from commonroad_crime.data_structure.configuration import CriMeConfiguration
 from commonroad_crime.data_structure.scene import Scene
@@ -314,51 +315,39 @@ def plot_criticality_curve(crime, nr_per_row=2, flag_latex=True):
 
 
 def visualize_scenario_at_time_steps(
-    scenario: Scenario, plot_limit, time_steps: List[int], print_obstacle_ids: bool = False,
+    scenario: Scenario, plot_limit, time_steps: List[int], print_obstacle_ids: bool = False, 
+    print_lanelet_ids: bool = False
 ):
     rnd = MPRenderer(plot_limits=plot_limit)
-    rnd.draw_params.time_begin = time_steps[0]
-    if time_steps:
-        rnd.draw_params.time_end = time_steps[-1]
+
+    assert isinstance(time_steps, list)
+    plot_begin: int = time_steps[0]
+    plot_end: int = time_steps[-1]
+    rnd.draw_params.time_begin = plot_begin
+    rnd.draw_params.time_end = plot_end
+
     rnd.draw_params.trajectory.draw_trajectory = False
     rnd.draw_params.dynamic_obstacle.draw_icon = True
+    rnd.draw_params.dynamic_obstacle.show_label = print_obstacle_ids
+    rnd.draw_params.lanelet_network.lanelet.show_label = print_lanelet_ids
     scenario.draw(rnd)
     rnd.render()
     for obs in scenario.obstacles:
+        plot_traj_begin_time_step = max(obs.prediction.initial_time_step, plot_begin)
+        plot_traj_end_time_step = min(obs.prediction.final_time_step, plot_end)
+        plot_traj_begin_index = plot_traj_begin_time_step - obs.prediction.initial_time_step
+        plot_traj_end_index = plot_traj_end_time_step - obs.prediction.initial_time_step
+
         draw_state_list(
             rnd,
-            obs.prediction.trajectory.state_list[time_steps[0] : time_steps[-1] + 1],
+            obs.prediction.trajectory.state_list[plot_traj_begin_index: plot_traj_end_index + 1],
             color=TUMcolor.TUMblue,
             linewidth=5,
         )
-        for ts in time_steps[1:]:
-            draw_dyn_vehicle_shape(rnd, obs, ts, color=TUMcolor.TUMblue)
-
-        if print_obstacle_ids:
-            print_obstacle_id(rnd, obs, time_steps[0], color=TUMcolor.TUMblack)
+        for ts in time_steps:
+            if plot_traj_begin_time_step <= ts <= plot_traj_end_time_step:
+                draw_dyn_vehicle_shape(rnd, obs, ts, color=TUMcolor.TUMblue)
     plt.show()
-
-def print_obstacle_id(   
-    rnd: MPRenderer,
-    obstacle: DynamicObstacle,
-    time_step: int,
-    color: TUMcolor = TUMcolor.TUMblue,
-    fontsize: int = 11,
-):
-    global zorder
-    obs_shape = obstacle.occupancy_at_time(time_step).shape
-    if isinstance(obs_shape, ShapeGroup):
-        for shape_element in obs_shape.shapes:
-            centroid = shape_element.shapely_object.centroid
-            rnd.ax.text(
-                centroid.x, centroid.y, str(obstacle.obstacle_id), color=color, fontsize=fontsize, zorder=zorder
-            )
-    else:
-        centroid = obs_shape.shapely_object.centroid
-        rnd.ax.text(
-            centroid.x, centroid.y, str(obstacle.obstacle_id), color=color, fontsize=fontsize, zorder=zorder
-        )
-    zorder += 1   
 
 def make_gif(
     path: str,
