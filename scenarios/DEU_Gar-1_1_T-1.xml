@@ -79,6 +79,7 @@
       </rightBound>
       <successor ref="47242"/>
       <adjacentLeft drivingDir="same" ref="47240"/>
+      <laneletType>country</laneletType>
    </lanelet>
    <lanelet id="47240">
       <leftBound>
@@ -143,6 +144,7 @@
       </rightBound>
       <successor ref="47244"/>
       <adjacentRight drivingDir="same" ref="47238"/>
+      <laneletType>country</laneletType>
    </lanelet>
    <lanelet id="47242">
       <leftBound>
@@ -248,6 +250,7 @@
       <predecessor ref="47238"/>
       <successor ref="47246"/>
       <adjacentLeft drivingDir="same" ref="47244"/>
+      <laneletType>country</laneletType>
    </lanelet>
    <lanelet id="47244">
       <leftBound>
@@ -345,6 +348,7 @@
       <predecessor ref="47240"/>
       <successor ref="47246"/>
       <adjacentRight drivingDir="same" ref="47242"/>
+      <laneletType>country</laneletType>
    </lanelet>
    <lanelet id="47246">
       <leftBound>
@@ -521,6 +525,7 @@
       </rightBound>
       <predecessor ref="47242"/>
       <predecessor ref="47244"/>
+      <laneletType>country</laneletType>
    </lanelet>
    <obstacle id="200">
       <role>dynamic</role>
