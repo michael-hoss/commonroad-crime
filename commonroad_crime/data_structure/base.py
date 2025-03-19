@@ -34,7 +34,7 @@ import commonroad_crime.utility.visualization as utils_vis
 import commonroad_crime.utility.general as utils_gen
 import commonroad_crime.utility.logger as utils_log
 
-from commonroad_dc.pycrccosy import CurvilinearCoordinateSystem
+from commonroad_clcs.pycrccosy import CurvilinearCoordinateSystem
 
 logger = logging.getLogger(__name__)
 

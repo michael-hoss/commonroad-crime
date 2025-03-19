@@ -18,8 +18,8 @@ from commonroad.scenario.state import (
 from commonroad.scenario.scenario import Scenario, DynamicObstacle, StaticObstacle
 from commonroad.common.file_reader import CommonRoadFileReader
 
-from commonroad_dc.geometry.util import chaikins_corner_cutting, resample_polyline
-import commonroad_dc.pycrccosy as pycrccosy
+from commonroad_clcs.util import chaikins_corner_cutting, resample_polyline
+import commonroad_clcs.pycrccosy as pycrccosy
 
 import commonroad_crime.utility.solver as utils_sol
 

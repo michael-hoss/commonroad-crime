@@ -25,13 +25,14 @@ from commonroad.scenario.obstacle import (
 from commonroad.scenario.state import State
 from commonroad.scenario.lanelet import Lanelet, LaneletNetwork
 
-from commonroad_dc.pycrccosy import CurvilinearCoordinateSystem
-from commonroad_dc.geometry.util import (
+from commonroad_clcs.pycrccosy import CurvilinearCoordinateSystem
+import commonroad_clcs.pycrccosy as pycrccosy
+
+from commonroad_clcs.util import (
     resample_polyline,
     compute_orientation_from_polyline,
     compute_pathlength_from_polyline,
 )
-import commonroad_dc.pycrccosy as pycrccosy
 
 from scipy.interpolate import splprep, splev
 
