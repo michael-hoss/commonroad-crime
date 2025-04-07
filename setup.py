@@ -34,7 +34,7 @@ setup(
         "commonroad-io>=2023.4",
         "commonroad-vehicle-models>=3.0.0",
         "commonroad-route-planner>=2024.2.0, <2025.0",
-        "commonroad-drivability-checker>=2023.1",
+        "commonroad-drivability-checker==2024.1",
         "commonroad-reach==2024.1.2",
         "matplotlib>=3.5.2,<3.9",
         "numpy>=1.19.0",
