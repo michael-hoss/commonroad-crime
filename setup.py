@@ -31,7 +31,7 @@ setup(
     packages=find_packages(),
     data_files=[(".", ["LICENSE"])],
     install_requires=[
-        "commonroad-io>=2023.4",
+        "commonroad-io>=2024.3",
         "commonroad-vehicle-models>=3.0.0",
         "commonroad-route-planner>=2025.1.0",
         "commonroad-drivability-checker>=2025.1",
