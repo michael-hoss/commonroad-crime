@@ -14,7 +14,7 @@ from commonroad_crime.data_structure.configuration import CriMeConfiguration
 from commonroad_crime.data_structure.crime_interface import CriMeInterface
 import commonroad_crime.utility.logger as util_logger
 
-from commonroad_dc.pycrccosy import CurvilinearCoordinateSystem
+from commonroad_clcs.pycrccosy import CurvilinearCoordinateSystem
 
 
 class TestBase(unittest.TestCase):
