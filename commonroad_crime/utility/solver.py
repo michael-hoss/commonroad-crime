@@ -237,7 +237,13 @@ def compute_lanelet_width_orientation(
         for orient in compute_orientation_from_polyline(center_vertices)
     ]
     path_length = compute_pathlength_from_polyline(center_vertices)
-    lanelet_clcs = CurvilinearCoordinateSystem(center_vertices)
+
+    #  cache the instance of CurvilinearCoordinateSystem object
+    if not hasattr(lanelet, "_cached_clcs"):
+        lanelet._cached_clcs = CurvilinearCoordinateSystem(center_vertices)
+
+    lanelet_clcs = lanelet._cached_clcs
+
     try:
         position_s, _ = lanelet_clcs.convert_to_curvilinear_coords(
             position[0], position[1]
