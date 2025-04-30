@@ -54,18 +54,11 @@ class ALongReq(CriMeBase):
             self.sce.lanelet_network.find_lanelet_by_id(lanelet_id[0]),
             self.ego_vehicle.state_at_time(time_step).position,
         )[1]
-        try:
-            other_orientation = utils_sol.compute_lanelet_width_orientation(
-                self.sce.lanelet_network.find_lanelet_by_id(lanelet_id[0]),
-                self.other_vehicle.state_at_time(time_step).position,
-            )[1]
-        except ValueError as e:
-            utils_log.print_and_log_warning(
-                logger,
-                f"* <A_LONG_REQ> During the projection of the vehicle {self.other_vehicle.obstacle_id} "
-                f"at time step {self.time_step}: {e}",
-                verbose,
-            )
+        other_orientation = utils_sol.compute_lanelet_width_orientation(
+            self.sce.lanelet_network.find_lanelet_by_id(lanelet_id[0]),
+            self.other_vehicle.state_at_time(time_step).position,
+        )[1]
+        if not ego_orientation or not other_orientation:
             # out of projection domain: the other vehicle is far away
             a_req = 0.0
         else:

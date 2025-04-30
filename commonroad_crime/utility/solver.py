@@ -25,13 +25,14 @@ from commonroad.scenario.obstacle import (
 from commonroad.scenario.state import State
 from commonroad.scenario.lanelet import Lanelet, LaneletNetwork
 
-from commonroad_dc.pycrccosy import CurvilinearCoordinateSystem
-from commonroad_dc.geometry.util import (
+from commonroad_clcs.pycrccosy import CurvilinearCoordinateSystem
+import commonroad_clcs.pycrccosy as pycrccosy
+
+from commonroad_clcs.util import (
     resample_polyline,
     compute_orientation_from_polyline,
     compute_pathlength_from_polyline,
 )
-import commonroad_dc.pycrccosy as pycrccosy
 
 from scipy.interpolate import splprep, splev
 
@@ -236,8 +237,21 @@ def compute_lanelet_width_orientation(
         for orient in compute_orientation_from_polyline(center_vertices)
     ]
     path_length = compute_pathlength_from_polyline(center_vertices)
-    lanelet_clcs = CurvilinearCoordinateSystem(center_vertices)
-    position_s, _ = lanelet_clcs.convert_to_curvilinear_coords(position[0], position[1])
+
+    #  cache the instance of CurvilinearCoordinateSystem object
+    if not hasattr(lanelet, "_cached_clcs"):
+        lanelet._cached_clcs = CurvilinearCoordinateSystem(center_vertices)
+
+    lanelet_clcs = lanelet._cached_clcs
+
+    try:
+        position_s, _ = lanelet_clcs.convert_to_curvilinear_coords(
+            position[0], position[1]
+        )
+    except Exception as e:
+        logging.warning(f"Failed to convert to curvilinear coords: {e}")
+        return None, None
+
     return np.interp(position_s, path_length, width_list), get_orientation_point(
         position_s, path_length, orient_list
     )
