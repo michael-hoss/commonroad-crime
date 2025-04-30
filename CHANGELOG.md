@@ -1,4 +1,8 @@
 # Changelog
+## [0.4.3] - 2025.04.30
+### Updated
+- Use the latest commonroad-clcs tool for curvilinear coordinate system conversion
+- Cache the clcs per Lanelet to reduce redundant recomputation
 ## [0.4.2] - 2024.10.15
 ### Fixed
 - Computation of THW
